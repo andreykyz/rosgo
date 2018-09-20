@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"net"
+	"os"
 	"reflect"
 	"time"
 )
@@ -39,7 +40,7 @@ type defaultServiceServer struct {
 func newDefaultServiceServer(node *defaultNode, service string, srvType ServiceType, handler interface{}) *defaultServiceServer {
 	logger := node.logger
 	server := new(defaultServiceServer)
-	if listener, err := listenRandomPort("127.0.0.1", 10); err != nil {
+	if listener, err := listenRandomPort(os.Getenv("ROS_IP"), 10); err != nil {
 		panic(err)
 	} else {
 		if tcpListener, ok := listener.(*net.TCPListener); ok {

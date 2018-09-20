@@ -177,12 +177,13 @@ func newDefaultNode(name string, args []string) (*defaultNode, error) {
 		}
 	}
 
-	listener, err := listenRandomPort("127.0.0.1", 10)
+	listener, err := listenRandomPort(os.Getenv("ROS_IP"), 10)
 	if err != nil {
 		logger.Fatal(err)
 		return nil, err
 	}
 	node.xmlrpcUri = fmt.Sprintf("http://%s", listener.Addr().String())
+	logger.Debugf("listen on http://%s", listener.Addr().String())
 	node.xmlrpcListener = listener
 	m := map[string]xmlrpc.Method{
 		"getBusStats":      func(callerId string) (interface{}, error) { return node.getBusStats(callerId) },
